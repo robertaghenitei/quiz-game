@@ -1,5 +1,7 @@
 import requests
 import pprint
+import random
+
 
 def get_response():
     response = int(input("Please chose the number of the correct question: "))
@@ -19,10 +21,11 @@ def format_the_question(data):
 
     print(f"{question}")
     
+    random.shuffle(all_answers)
 
     for i, answer in enumerate(all_answers):
         print(f"{i}. {answer}")
-
+    return [all_answers, correct_answer]
 
 
 def get_question_from_api():
@@ -43,10 +46,20 @@ def get_question_from_api():
 
 
 def main():   
-    question = get_question_from_api()
-    format_the_question(question)
-    response = get_response()
-
-
+    score = 0
+    while True:
+        question = get_question_from_api()
+        answers = format_the_question(question)
+        response = get_response()
+        if answers[0][response] == answers[1]:
+            print("Correct")
+            score += 1
+        else:
+            print("False")
+        print("Score =", score)
+        finish = input("Do you wanna quit? (y/n):")
+        if finish == "y":
+            break
+        
 if __name__ == "__main__":
     main()
