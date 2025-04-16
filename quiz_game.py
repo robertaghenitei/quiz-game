@@ -4,8 +4,17 @@ import random
 
 
 def get_response():
-    response = int(input("Please chose the number of the correct question: "))
-    return response
+    try:
+        response = int(input("Please chose the number of the correct question:(1-4) "))
+        if 1 <= response <= 4:
+            return response - 1
+        else:
+            print("Invalid answer. You must chose a number between 1 - 4")
+        return get_response()
+    except ValueError:
+        print("Invalid answer. You must chose a number between 1 - 4")
+        return get_response()
+    
 
 
 
@@ -24,7 +33,7 @@ def format_the_question(data):
     random.shuffle(all_answers)
 
     for i, answer in enumerate(all_answers):
-        print(f"{i}. {answer}")
+        print(f"{i+1}. {answer}")
     return [all_answers, correct_answer]
 
 
@@ -57,8 +66,8 @@ def main():
         else:
             print("False")
         print("Score =", score)
-        finish = input("Do you wanna quit? (y/n):")
-        if finish == "y":
+        finish = input("Do you wanna continue? (y/n):")
+        if finish == "n":
             break
         
 if __name__ == "__main__":
