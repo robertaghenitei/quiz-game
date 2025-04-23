@@ -1,7 +1,7 @@
 import requests
-import pprint
+import pprint #used this to see the response 
 import random
-
+import html #sometimes the api uses &quot, &#039 so we use this to unencode the answer  
 
 def get_response():
     try:
@@ -10,7 +10,7 @@ def get_response():
             return response - 1
         else:
             print("Invalid answer. You must chose a number between 1 - 4")
-        return get_response()
+            return get_response()
     except ValueError:
         print("Invalid answer. You must chose a number between 1 - 4")
         return get_response()
@@ -21,10 +21,10 @@ def get_response():
 def format_the_question(data):
     category = data[0]['category']
     difficulty = data[0]['difficulty']
-    correct_answer = data[0]['correct_answer']
-    all_answers = data[0]['incorrect_answers'] + [correct_answer]
+    correct_answer = html.unescape(data[0]['correct_answer'])
+    all_answers = [html.unescape(ans) for ans in data[0]['incorrect_answers']] + [correct_answer]
     # print(all_answers)
-    question = data[0]['question']
+    question = html.unescape(data[0]['question'])
 
     print(f"This question is of {difficulty} difficulty:")
 
@@ -64,7 +64,7 @@ def main():
             print("Correct")
             score += 1
         else:
-            print("False")
+            print(f"Wrong! The correct answer was: {answers[1]}")
         print("Score =", score)
         finish = input("Do you wanna continue? (y/n):")
         if finish == "n":
